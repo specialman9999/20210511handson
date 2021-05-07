@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-05-07T14:42:57Z",
+  "id": "20210511handson",
+  "duration": 0,
+  "title": "LINE公式アカウントとスプレッドシートで ショップ向け問い合わせフォームを作る【入門勉強会】",
+  "authors": "specialman9999",
+  "summary": "LINE公式アカウントとスプレッドシートで ショップ向け問い合わせフォームを作る【入門勉強会】",
+  "source": "1aTIlXej2KUIFlE4wjFmQUp7bXAlZ12Vpfm3uxKQjyZc",
+  "theme": "web",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "Web"
+  ],
+  "tags": [
+    "line",
+    "web"
+  ],
+  "url": "20210511handson"
+}
