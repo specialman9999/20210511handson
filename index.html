@@ -1,0 +1,355 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>LINE公式アカウントとスプレッドシートで ショップ向け問い合わせフォームを作る【入門勉強会】</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="20210511handson"
+                  title="LINE公式アカウントとスプレッドシートで ショップ向け問い合わせフォームを作る【入門勉強会】"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="本日のゴール" duration="0">
+        <p class="image-container"><img style="width: 624.00px" src="img\5f5786aa23a03f8e.png"></p>
+<p>LINEからLINE公式アカウントにメッセージを送信するとGASで処理をして、スプレッドシートに保存します。次にメールアドレスの保存を促すメッセージを送信して、そのメッセージを保存するものを作成します。</p>
+<p class="image-container"><img style="width: 377.00px" src="img\d88ba4944e1cd3a5.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="LINE Developers への登録" duration="0">
+        <h2 is-upgraded>１．１ LINE Developers（<a href="https://developers.line.biz/ja/" target="_blank">https://developers.line.biz/ja/</a><strong>）からログイン</strong></h2>
+<p class="image-container"><img style="width: 624.00px" src="img\faa17261b9332cfc.png"></p>
+<h2 is-upgraded><strong>１．２．アカウントを入力</strong></h2>
+<pre>LINEアカウント・・・・・ 現在、利用しているLINEと連携することができます。
+ビジネスアカウント・・・ メールアドレスで登録することができます。</pre>
+<p>※LINEアカウントだと、スマホでQRコードを読み取ってログインができるなど簡単なのでおすすめです。</p>
+<aside class="special"><p>アカウントをお持ちの方は、ログインしてチャネル作成に進んでください。</p>
+</aside>
+<p>アカウントをお持ちでないかたは、これからアカウントを作成します。</p>
+<h3 is-upgraded><strong>１．２．１ アカウントの新規作成</strong></h3>
+<p> ①</p>
+<p> 初めての方は「アカウントの作成」を押下してください。</p>
+<p class="image-container"><img style="width: 371.00px" src="img\bbd49bad6bf2a6d5.png"></p>
+<p> ②</p>
+<p>「LINEアカウントで登録」または「メールアドレスで登録」を選択してください。</p>
+<aside class="special"><p>LINEアカウントで登録のほうがQRコードログインでいけるので簡単です。個人のLINEアカウントと連携します。</p>
+</aside>
+<p>LINEアカウントで登録は簡単ですので、こちらでは、メールアドレスで登録の説明をします。</p>
+<p class="image-container"><img style="width: 436.00px" src="img\9e256a8a0c8d01e3.png"></p>
+<p>③登録するメールアドレスを入力してください。</p>
+<p class="image-container"><img style="width: 357.58px" src="img\42cd650bc6e93b7a.png"></p>
+<p>④入力したメールアドレスに登録確認メールが届きますので「登録画面に進む」を押してください。</p>
+<p class="image-container"><img style="width: 512.00px" src="img\985114d2d09ce79d.png"></p>
+<p>⑤名前とパスワードを入力して登録してください。</p>
+<p class="image-container"><img style="width: 333.00px" src="img\18bf618bab2767c9.png"></p>
+<p>⑥登録確認画面で「登録」を押下</p>
+<p class="image-container"><img style="width: 403.00px" src="img\a8b93cbe7e65624e.png"></p>
+<p>⑦ユーザー登録が完了しました。LINE DevelopersIDの作成を行います</p>
+<p class="image-container"><img style="width: 456.00px" src="img\dc6faf9b20e4c53d.png"></p>
+<p>⑧LINE開発者登録</p>
+<p>開発者名とメールアドレスを入力し、LINE開発者契約の内容を確認しチェックをいれ、アカウントを作成します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\2e836717c0b04fd1.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="チャネル作成" duration="0">
+        <h2 is-upgraded>３．１ 新規プロバイダーを作成<img style="width: 624.00px" src="img\5cdc3e16ec8bb132.png"></h2>
+<h2 is-upgraded><strong>３．２ チャネル作成</strong></h2>
+<p>チャネル設定で「Messaging API」を選択</p>
+<p class="image-container"><img style="width: 624.00px" src="img\1dd0f47156c50f0.png"></p>
+<p>チャネルを作成します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\8008b001d6007c7f.png"></p>
+<pre>・チャネルの種類
+ MessagingAPI（自動で選択済み）
+・プロバイダー
+ 先ほど作成したプロバイダー（自動で選択済み）
+・チャネルアイコン
+ 今回のチャネルのアイコンを設定できます。
+ 特にない場合は選択無しでも、後ほど設定できます。
+・チャネル名
+ 20210511ハンズオン
+ など、任意のチャネル名を設定してください。
+・チャネルの説明
+ 簡単な説明をいれます。チャネル名と同じでも問題ありません。
+・大業種
+ 個人
+・小業種
+ 個人（その他）
+・メールアドレス
+ 自動入力済み
+・プライバリーポリシーURL
+ サービス利用規約URL
+ 今回は空欄。</pre>
+<p><strong>「LINE公式アカウント利用規約」</strong>と<strong>「LINE公式アカウントAPI利用規約」</strong>にチェックをいれ作成ボタンを押します。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="MessagingAPI設定" duration="0">
+        <aside class="special"><p>ここから少し聞きなれない言葉が出てくるかもしれませんが、難しくありませんのでご安心ください。</p>
+</aside>
+<h2 is-upgraded><strong>４．１ チャネルアクセストークンの発行</strong></h2>
+<p>このチャネルと後ほど作成するGAS(Google Apps Script)をつなぐ認証キーを発行します。</p>
+<p>先ほどの画面で「MessagingAPI設定」タブを押し、下部にある「チャネルアクセストークン(長期)」の発行ボタンを押します。すると長い文字列が表示されます。これが「チャネルアクセストークン」となり、認証に使われる文字列となります。外部に漏れると、このLINEチャネルが悪用される恐れがありますので、ご注意ください。</p>
+<p>この発行されたチャネルアクセストークンをメモしてください。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\6cb3fcf8a7a75b83.png"></p>
+<h2 is-upgraded><strong>４．２ webhook設定</strong></h2>
+<p>Webhookとは、http通信でデータを送信すること先を設定することです。</p>
+<p>LINEから入力されたデータをどこのURLに送信するかを設定します。</p>
+<aside class="warning"><p>今回はGASのURLに送信しますので、設定は８．webhook設定で行います。</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="LINE公式アカウント機能の設定" duration="0">
+        <p>LINE Developersの機能では、高度なMessaging APIの設定などは行えますが、簡単な応答メッセージや、挨拶メッセージの設定は、LINE official Account Managerにて行います。その他、チャネルのアイコンや名称、リッチメニューの設定などもLINE official Account Managerにて行います。</p>
+<h2 is-upgraded><strong>５．１応答メッセージのオフ設定</strong></h2>
+<aside class="special"><p>現状のままだと、話かけるたびに、MessagingAPIでこれから作成する文字以外に、LINE official Account Manager でデフォルトで設定されている応答メッセージが返答されてしまいます。その設定をオフにします。</p>
+</aside>
+<p>では設定を行います。</p>
+<p>MessagingAPI設定タブから、下部にある応答メッセージの編集ボタンをクリックします。するLINE official Account Managerに飛びます。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\585f0ef0e1c7a36c.png"></p>
+<p>LINE official Account Managerの画面から、応答設定にある、応答メッセージをオフにします。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\391ef2474f51ccd5.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="スプレッドシートおよびGASの作成" duration="0">
+        <p>データベースとして使用するスプレッドシートとGASの作成を行います。</p>
+<p>今回コード(プログラム)は、事前に作成しておりますのでそちらを利用します。</p>
+<h2 is-upgraded><strong>６．１ スプレッドシートのコピー</strong></h2>
+<p>下記アドレスの開きスプレッドシートを各自のマイドライブにコピーしてください。</p>
+<p><a href="https://docs.google.com/spreadsheets/d/1V24sAlpsia1-cEhbYQ4J_bXVG8-qpUdPRhlgm5QJPAE/edit?usp=sharing" target="_blank">https://docs.google.com/spreadsheets/d/1V24sAlpsia1-cEhbYQ4J_bXVG8-qpUdPRhlgm5QJPAE/edit?usp=sharing</a></p>
+<p class="image-container"><img style="width: 547.00px" src="img\b2e3ff324b05fc74.png"></p>
+<p class="image-container"><img style="width: 402.00px" src="img\acd0050436479e16.png"></p>
+<h2 is-upgraded><strong>６．２ GASコードの編集</strong></h2>
+<p>GASのコードは記載されております。皆さんのファイルで利用できるように先ほど取得したチャネルアクセストークンとスプレッドシートのURLを記載します。</p>
+<p>まずは、スクリプトエディタを開きます。</p>
+<p>スプレッドシートから「ツール」→「スクリプトエディタ」を選択してます。</p>
+<p>（1回選択するだけだと、開かないことがあるので、その時はもう1度同じように選択してください。）</p>
+<p class="image-container"><img style="width: 624.00px" src="img\6eb5d4541c241b10.png"></p>
+<p>スクリプトエディタが開き、今回使用するコードがみられると思います。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\7c1ca50c9ab0a4a8.png"></p>
+<p>ここに記載のある</p>
+<pre>const SHEET_URL = &#34;https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXX/&#34;;
+const CHANNEL_ACCESS_TOKEN = &#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/w1cDnyilFU=&#39;;</pre>
+<p>を編集します。</p>
+<p>SHEET_URLには<br>先ほど、マイドライブにコピーしたスプレッドシートのURLをコピーしてください。<br></p>
+<aside class="warning"><p>https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXX/<strong>edit#gid=0<br>この太字（</strong>edit#gid=0）<strong>の部分は必要ありません。</strong></p>
+</aside>
+<p>CHANNEL_ACCESS_TOKENには、先ほどLINE DevelopersのMessagingAPIで取得したチャネルアクセストークンを記載します。（非常に長いですがそのままコピーしてください。）<br></p>
+<aside class="warning"><p>今記載されております。クォーテーションマーク（ &#39; ）は削除せずに、その中に記載してください。</p>
+</aside>
+<p>記載が完了しましたら保存ボタンをおしてください。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\1b51470629becd8d.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="スクリプトのデプロイ" duration="0">
+        <h2 is-upgraded><strong>７．１ 新しいデプロイの実行</strong></h2>
+<p>保存が完了しましたら、デプロイをします。</p>
+<aside class="special"><p>デプロイとは、開発したスクリプトをサーバー上に展開して利用できるようにすることです。</p>
+</aside>
+<p>では、実際にやってみましょう。</p>
+<p>右上にある、「デプロイ」ボタンから「新しいデプロイ」を選択します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\b6b2374c472e1fd7.png"></p>
+<p>新しいデプロイ画面でウェブアプリを選択します。</p>
+<p>そして各項目を入力します。</p>
+<pre>・説明
+ 例）ハンズオンデプロイ初回
+ ※この欄は空欄でもかまいません
+・ウェブアプリ
+ 自分
+・アクセスできるユーザー
+ 全員</pre>
+<p>に設定して、デプロイボタンを押します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\15ff81f7a20a7adf.png"></p>
+<p>初めてそのコードをデプロイするときは、承認してもよいかの確認がありますので</p>
+<p>「アクセスを承認」ボタンを押します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\3b822d44eb55c09f.png"></p>
+<p>次にどのアカウントで承認するか選択します。</p>
+<p>スプレッドシートおよびGASを作成したアカウントを選択します。</p>
+<aside class="special"><p>表示されている言語が英語になっている場合、左下にある言語設定を、「日本語」に変更してください。</p>
+</aside>
+<p class="image-container"><img style="width: 497.00px" src="img\9a0f239c2e383727.png"></p>
+<aside class="warning"><p>ここが、要注意ポイントです。</p>
+<p>デプロイするコードはスプレッドシートなどにアクセスするため、Googleから注意画面が表示されます。</p>
+<p>「安全なページに戻る」を押すと、先に進まずに戻りますので、左下に表示されている「詳細」をクリックします。</p>
+</aside>
+<p class="image-container"><img style="width: 624.00px" src="img\dc1bf50340ae19b3.png"></p>
+<aside class="warning"><p>詳細が展開されましたら、【〇〇〇〇〇（ファイル名）（安全ではないページ）に移動】をクリックします。</p>
+</aside>
+<p class="image-container"><img style="width: 624.00px" src="img\ebfe2ab73ff5576.png"></p>
+<p>作成したGASがスプレッドシートのデータを編集したり、外部サービス(今回であれば、LINEDevelopers)へ接続してもよいかの確認が来ますので、許可ボタンを押します。</p>
+<p class="image-container"><img style="width: 488.00px" src="img\4745117cd65a88ec.png"></p>
+<p>デプロイが完了です。</p>
+<p>以下の画面が表示されます。</p>
+<p>ウェブアプリに表示されているURLが、作成をしたWEBアプリのURLです。</p>
+<aside class="special"><p>こちらをLINE Developersのwebhookの送信先に設定しますのでコピーしてください。</p>
+</aside>
+<p class="image-container"><img style="width: 624.00px" src="img\b0d18dc97705776f.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="webhook設定" duration="0">
+        <p>先ほどGASで作成したWEBアプリのURLをwebhookの送信先として設定します。</p>
+<p>LINEDevelopersの画面に戻り、MessagingAPI設定タブを選択し、Webhook設定のWebhook URLのところに、先ほどコピーしたWEBアプリのURLを貼り付けます。</p>
+<p>貼り付けて更新ボタンを押し、そしてwebhookの利用にチェックをいれます。</p>
+<aside class="warning"><p>自動でWebhookの利用にチェックが入りませんので、ご注意ください。</p>
+</aside>
+<p class="image-container"><img style="width: 624.00px" src="img\7b7ff092179c612c.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="完成！動くか試してみましょう！" duration="0">
+        <p>以上で、完了となります。</p>
+<p>実際に、動くか皆さんのLINEに友だち登録をして、動作するか試してみましょう。</p>
+<p>LINEDevelopersから、MessagingAPI設定タブを選択します。</p>
+<p>するとQRコードが表示されておりますので、こちらをスマホで読み込んで友だち登録します。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\fc377980c881ca83.png"></p>
+<p>以下のようにメッセージがかえってくれば成功です！！</p>
+<p class="image-container"><img style="width: 377.00px" src="img\d88ba4944e1cd3a5.png"></p>
+<p>それでは先ほど、コピーして保存しましたスプレッドシートをご覧ください。</p>
+<p>こちらで話しかけたメッセージが保存されていると思います。</p>
+<p class="image-container"><img style="width: 624.00px" src="img\e7d0eedb3a8cb1e5.png"></p>
+<aside class="special"><p>GASで記載した文言を変えれば、返答されるメッセージが変更されたり、保存する内容が変更できたりします。いろいろチャレンジしてみてください。</p>
+<p>コードはフリーですので、流用していただいて結構です！！</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Appendix" duration="0">
+        <p>GASに記載されていたコード</p>
+<pre>const SHEET_URL = &#34;https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXXX/&#34;;
+const CHANNEL_ACCESS_TOKEN = &#39;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/w1cDnyilFU=&#39;;
+var SS = SpreadsheetApp.openByUrl(SHEET_URL); //SpreadsheetのURL
+var sheet = SS.getSheetByName(&#34;Inquiry&#34;); //Spreadsheetのシート名（タブ名）
+var log = SS.getSheetByName(&#34;log&#34;); //Spreadsheetのシート名（タブ名）
+var ID_data = sheet.getRange(1, 2, sheet.getLastRow()).getValues();
+
+
+function doPost(request) {
+ //POSTリクエストをJSONデータにパース
+ const receiveJSON = JSON.parse(request.postData.contents);
+ const event = receiveJSON.events[0];
+
+//送られてきたデータをlogシートに記載
+log.appendRow([event]);
+
+//友だち追加されたときに、実施するイベント
+ if(event.type==&#34;follow&#34;){
+   sheet.appendRow([getCurrentTime(),event.source.userId,,,,&#34;follow&#34;]);
+   LINE_send(event.replyToken,&#34;はじめまして、問い合わせありがとうございます。\nお問合せ内容をご入力ください。&#34;)
+   return // returnで、処理を終了させる。
+  }
+
+//テキスト以外が送られてきたときは何もしない。
+ if (event.message.type != &#34;text&#34;){
+   return  
+  }
+
+ //下に記載のfunction useID_check()にuserIdを入力して実行
+ //＋１することにより、行番号を同じにしている。
+ var data_row =  useID_check(event.source.userId) + 1
+
+//上で得たuseIdの行番号と６列目のデータ(ユーザーのステータス)の値を取得
+ var user_status = sheet.getRange(data_row,6).getValue();
+
+ if(user_status===&#34;follow&#34;){
+   LINE_send(event.replyToken,&#34;お名前をご入力ください。&#34;)
+   sheet.getRange(data_row,3).setValue(event.message.text);
+   sheet.getRange(data_row,6).setValue(&#34;name&#34;);
+  }else if(user_status===&#34;name&#34; || user_status===&#34;name&#34;){
+   LINE_send(event.replyToken,&#34;ご連絡用のメールアドレスをご入力ください。&#34;)
+   sheet.getRange(data_row,4).setValue(event.message.text);
+   sheet.getRange(data_row,6).setValue(&#34;address&#34;);
+  }else if(user_status===&#34;address&#34;){
+   LINE_send(event.replyToken,&#34;ありがとうございます。\n確認取れ次第返信いたします。&#34;)
+   sheet.getRange(data_row,5).setValue(event.message.text);
+   sheet.getRange(data_row,6).setValue(&#34;finish&#34;);
+  }else{
+   LINE_send(event.replyToken,&#34;いつも、問い合わせありがとうございます。\nお名前をご入力ください。&#34;)
+   sheet.appendRow([getCurrentTime(),event.source.userId,event.message.text,,,&#34;name&#34;]);
+ }
+
+}
+
+
+function getCurrentTime() {
+  //日付の宣言
+  return Utilities.formatDate(new Date(), &#34;Asia/Tokyo&#34;, &#34;yyyy/MM/dd HH:mm:ss&#34;);
+}
+
+
+//送られてきたuserIDがどこにあるかをチェックする。lastIndexOf()で一番最後の行から上の行に向かって検索する。なかった場合は、-1の数字が返される。
+function useID_check(userId) { 
+  //2次元配列を1次元配列に変換
+ var arrData = Array.prototype.concat.apply([], ID_data);
+ //1次元配列に変換した ID_data(A列)の中に、userIdが含まれているかチェック -1であれば入っていない
+ var check = arrData.lastIndexOf(userId); 
+ return check;
+}
+
+function LINE_send(replyToken,text) {
+  reply_text ={
+    &#34;replyToken&#34;: replyToken,
+   &#34;messages&#34;: [{
+     &#34;type&#34;: &#34;text&#34;,
+     &#34;text&#34;: text,
+     }]
+  }
+
+ options = {
+   &#34;method&#34;: &#34;post&#34;,
+   &#34;headers&#34;: 
+   {
+     &#34;Content-Type&#34;: &#34;application/json&#34;,
+     &#34;Authorization&#34;: &#34;Bearer &#34; + CHANNEL_ACCESS_TOKEN,
+   },
+   &#34;payload&#34;: JSON.stringify(reply_text)
+  };
+
+  UrlFetchApp.fetch(&#34;https://api.line.me/v2/bot/message/reply&#34;, options);
+}
+
+;</pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
